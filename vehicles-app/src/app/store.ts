@@ -1,8 +1,12 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit'
+import { TypedUseSelectorHook, useSelector } from 'react-redux'
+import dataReducer from './data'
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    data: dataReducer,
+  },
 })
 
 export type RootState = ReturnType<typeof store.getState>
-export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action<string>>
+export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector
