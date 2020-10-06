@@ -55,13 +55,15 @@ async function handleRequest(req, res) {
   }
 }
 
+let i = 0;
+
 function handleGet(req, res, data, filters) {
   if (req.method !== 'GET') {
     throw new HttpError(405);
   }
 
-  const random = Math.random();
-  if (random >= 0.8) {
+  i++;
+  if (i % 2 === 0) {
     throw new HttpError(503);
   }
 
@@ -69,12 +71,12 @@ function handleGet(req, res, data, filters) {
   if (filters) {
     filteredData = filterData(req, data, filters);
 
-    if(data === models) {
-      filteredData = filteredData.map(({make, model}) => model);
+    if (data === models) {
+      filteredData = filteredData.map(({ make, model }) => model);
     }
   }
 
-  res.writeHead(200, { "Content-Type": "application/json" });
+  res.writeHead(200, { 'Content-Type': 'application/json' });
   res.write(JSON.stringify(filteredData, 0, 2));
   res.end();
 }
@@ -82,12 +84,15 @@ function handleGet(req, res, data, filters) {
 function filterData(req, data, properties) {
   const urlParts = url.parse(req.url, true);
 
-  if (!properties.every(property => urlParts.query[property])) {
-    throw new HttpError(422, `You must specify the following parameters: ${properties.join(', ')}.`);
+  if (!properties.every((property) => urlParts.query[property])) {
+    throw new HttpError(
+      422,
+      `You must specify the following parameters: ${properties.join(', ')}.`
+    );
   }
 
-  return data.filter(item =>
-    properties.every(property => {
+  return data.filter((item) =>
+    properties.every((property) => {
       const regx = new RegExp(urlParts.query[property], 'i');
       return item[property].search(regx) >= 0;
     })
@@ -95,5 +100,5 @@ function filterData(req, data, properties) {
 }
 
 server.listen(port, function () {
-  console.log("Server listening on: http://localhost:%s", port);
+  console.log('Server listening on: http://localhost:%s', port);
 });

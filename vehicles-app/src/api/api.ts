@@ -10,13 +10,25 @@ async function fetchData<T>(url: string, init?: RequestInit): Promise<T> {
   })
 }
 
+function paramsToQueryString(params: Record<string, string>) {
+  return Object.entries(params)
+    .map(([key, value]) => `${key}=${value}`)
+    .join('&')
+}
+
+function buildUrlWithParams(url: string, params?: Record<string, string>) {
+  const paramsQueryString = paramsToQueryString(params || {})
+
+  if (paramsQueryString.length > 0) {
+    url += `?${paramsQueryString}`
+  }
+
+  return url
+}
+
 const api = {
   get: async <T>(url: string, params?: Record<string, string>): Promise<T> => {
-    const paramsString = Object.entries(params || {})
-      .map(([key, value]) => `${key}=${value}`)
-      .join('&')
-    url = `${url}${params !== undefined ? `?${paramsString}` : ''}`
-    return await fetchData<T>(url)
+    return fetchData<T>(buildUrlWithParams(url, params))
   },
 }
 

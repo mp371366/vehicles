@@ -7,11 +7,23 @@ export const fetchMakes = createAsyncThunk('/makes', async () => {
 
 const makesSlice = createSlice({
   name: 'makes',
-  initialState: { makes: [] as string[] },
+  initialState: {
+    makes: [] as string[],
+    loading: false,
+    error: null as string | null,
+  },
   reducers: {},
   extraReducers: {
+    [fetchMakes.pending.toString()]: (state) => {
+      state.loading = true
+    },
     [fetchMakes.fulfilled.toString()]: (state, action: PayloadAction<string[]>) => {
       state.makes = action.payload
+      state.loading = false
+    },
+    [fetchMakes.rejected.toString()]: (state, action) => {
+      state.error = action.error.message
+      state.loading = false
     },
   },
 })
