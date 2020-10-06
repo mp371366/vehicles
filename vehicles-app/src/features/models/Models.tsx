@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import { useTypedSelector } from '../../app/store'
+import WithList, { ListComponentProps } from '../../hocs/withList/WithList'
 import { fetchModels } from './modelsSlice'
 
 function Models() {
@@ -22,23 +23,21 @@ function Models() {
     )
   }
 
+  const ListItem = ({ data }: ListComponentProps<string>) => {
+    return (
+      <li>
+        <Link to={`/${make}/${data}`}>{data}</Link>
+      </li>
+    )
+  }
+
+  const ModelsList = WithList(ListItem)
+
   return (
     <div className="Models">
       <header className="Models-header">Models</header>
       {error && <p>{error}</p>}
-      <ul>
-        {models.map((model) => (
-          <li key={model}>
-            <Link
-              to={{
-                pathname: `/${make}/${model}`,
-              }}
-            >
-              {model}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <ModelsList items={models} />
     </div>
   )
 }

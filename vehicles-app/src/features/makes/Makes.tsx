@@ -2,6 +2,7 @@ import React, { useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useTypedSelector } from '../../app/store'
+import WithList, { ListComponentProps } from '../../hocs/withList/WithList'
 import { fetchMakes } from './makesSlice'
 
 function Makes() {
@@ -25,24 +26,22 @@ function Makes() {
     )
   }
 
+  const ListItem = ({ data }: ListComponentProps<string>) => {
+    return (
+      <li>
+        <Link to={`/${data}`}>{data}</Link>
+      </li>
+    )
+  }
+
+  const MakesList = WithList(ListItem)
+
   return (
     <div className="Makes">
       <header className="Makes-header">Makes</header>
       <button onClick={fetchData}>refresh</button>
       {error && <p>{error}</p>}
-      <ul>
-        {makes.map((make) => (
-          <li key={make}>
-            <Link
-              to={{
-                pathname: `/${make}`,
-              }}
-            >
-              {make}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <MakesList items={makes} />
     </div>
   )
 }
