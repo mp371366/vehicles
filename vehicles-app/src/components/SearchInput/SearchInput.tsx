@@ -1,4 +1,5 @@
 import React from 'react'
+import './SearchInput.css'
 
 type SearchInputProps = {
   show?: boolean
@@ -20,7 +21,9 @@ function SearchInput({ show = true, value = '', onChange, onClose, placeholder =
   return (
     <div className="SearchInput">
       <input type="text" placeholder={placeholder} value={value} onChange={handleOnChange} />
-      <span onClick={onClose}>&#10799;</span>
+      <div className="icon" onClick={onClose}>
+        &#10799;
+      </div>
     </div>
   )
 }
