@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { useTypedSelector } from '../../app/store'
+import ErrorInfo from '../../components/ErrorInfo/ErrorInfo'
 import WithList, { ListComponentProps } from '../../hocs/withList/WithList'
 import WithLoading from '../../hocs/withLoading/WithLoading'
-import { fetchVehicles, Vehicle } from './vehiclesSlice'
+import { fetchVehicles, setError, Vehicle } from './vehiclesSlice'
 import { VehiclesParams } from './vehiclesSlice'
 
 const ListItem: React.FC<ListComponentProps<Vehicle>> = ({ data, idx }) => {
@@ -20,14 +21,19 @@ function Vehicles() {
   const params = useParams<VehiclesParams>()
   const { vehicles, loading, error } = useTypedSelector((state) => state.data.vehicles)
 
-  useEffect(() => {
+  const fetchData = useCallback(() => {
+    dispatch(setError(null))
     dispatch(fetchVehicles(params))
   }, [dispatch, params])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
 
   return (
     <div className="Vehicles">
       <header className="Vehicles-header">Vehicles</header>
-      {error && <p>{error}</p>}
+      <ErrorInfo error={error} onFix={fetchData} />
       <VehiclesListWithLoading items={vehicles} loading={loading} />
     </div>
   )

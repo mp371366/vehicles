@@ -2,9 +2,10 @@ import React, { useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useTypedSelector } from '../../app/store'
+import ErrorInfo from '../../components/ErrorInfo/ErrorInfo'
 import WithList, { ListComponentProps } from '../../hocs/withList/WithList'
 import WithLoading from '../../hocs/withLoading/WithLoading'
-import { fetchMakes } from './makesSlice'
+import { fetchMakes, setError } from './makesSlice'
 
 const ListItem: React.FC<ListComponentProps<string>> = ({ data }) => {
   return (
@@ -23,6 +24,7 @@ function Makes() {
   const { makes, loading, error } = useTypedSelector((state) => state.data.makes)
 
   const fetchData = useCallback(() => {
+    dispatch(setError(null))
     dispatch(fetchMakes())
   }, [dispatch])
 
@@ -33,8 +35,7 @@ function Makes() {
   return (
     <div className="Makes">
       <header className="Makes-header">Makes</header>
-      <button onClick={fetchData}>refresh</button>
-      {error && <p>{error}</p>}
+      <ErrorInfo error={error} onFix={fetchData} />
       <MakesListWithLoading loading={loading} items={makes} />
     </div>
   )

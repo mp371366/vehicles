@@ -27,7 +27,11 @@ const vehiclesSlice = createSlice({
     loading: false,
     error: null as string | null,
   },
-  reducers: {},
+  reducers: {
+    setError: (state, action: PayloadAction<string | null>) => {
+      state.error = action.payload
+    },
+  },
   extraReducers: {
     [fetchVehicles.pending.toString()]: (state) => {
       state.loading = true
@@ -45,3 +49,5 @@ const vehiclesSlice = createSlice({
 
 const vehiclesReducer = vehiclesSlice.reducer
 export default vehiclesReducer
+
+export const { setError } = vehiclesSlice.actions

@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import { useTypedSelector } from '../../app/store'
+import ErrorInfo from '../../components/ErrorInfo/ErrorInfo'
 import WithList, { ListComponentProps } from '../../hocs/withList/WithList'
 import WithLoading from '../../hocs/withLoading/WithLoading'
-import { fetchModels } from './modelsSlice'
+import { fetchModels, setError } from './modelsSlice'
 
 type ItemProps = { make: string; model: string }
 type ListItemProps = ListComponentProps<ItemProps>
@@ -26,14 +27,19 @@ function Models() {
   const { make } = useParams<{ make: string }>()
   const { models, loading, error } = useTypedSelector((state) => state.data.models)
 
-  useEffect(() => {
+  const fetchData = useCallback(() => {
+    dispatch(setError(null))
     dispatch(fetchModels(make))
   }, [dispatch, make])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
 
   return (
     <div className="Models">
       <header className="Models-header">Models</header>
-      {error && <p>{error}</p>}
+      <ErrorInfo error={error} onFix={fetchData} />
       <ModelsListWithLoading loading={loading} items={models.map((model) => ({ model, make }))} />
     </div>
   )

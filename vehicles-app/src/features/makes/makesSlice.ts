@@ -12,7 +12,11 @@ const makesSlice = createSlice({
     loading: false,
     error: null as string | null,
   },
-  reducers: {},
+  reducers: {
+    setError: (state, action: PayloadAction<string | null>) => {
+      state.error = action.payload
+    },
+  },
   extraReducers: {
     [fetchMakes.pending.toString()]: (state) => {
       state.loading = true
@@ -30,3 +34,5 @@ const makesSlice = createSlice({
 
 const makesReducer = makesSlice.reducer
 export default makesReducer
+
+export const { setError } = makesSlice.actions
