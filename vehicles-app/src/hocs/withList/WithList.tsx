@@ -1,6 +1,6 @@
 import React from 'react'
 
-const DefaultInfo = () => <p>The is no items.</p>
+const DefaultInfo = ({ name = 'items' }) => <p>There is no {name}.</p>
 
 interface WithListProps<T> {
   items: T[]
@@ -11,8 +11,11 @@ export interface ListComponentProps<T> {
   idx: number
 }
 
-function WithList<T>(Component: React.ComponentType<ListComponentProps<T>>, Info = DefaultInfo) {
-  return function WithListComponent({ items }: WithListProps<T>) {
+function WithList<T>(
+  Component: React.ComponentType<ListComponentProps<T>>,
+  Info = DefaultInfo
+): React.ComponentType<WithListProps<T>> {
+  return function WithListComponent({ items }) {
     if (items.length === 0) {
       return <Info />
     }

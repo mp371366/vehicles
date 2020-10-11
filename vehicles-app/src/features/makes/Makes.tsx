@@ -3,7 +3,20 @@ import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useTypedSelector } from '../../app/store'
 import WithList, { ListComponentProps } from '../../hocs/withList/WithList'
+import WithLoading from '../../hocs/withLoading/WithLoading'
 import { fetchMakes } from './makesSlice'
+
+const ListItem: React.FC<ListComponentProps<string>> = ({ data }) => {
+  return (
+    <li>
+      <Link to={`/${data}`}>{data}</Link>
+    </li>
+  )
+}
+
+const MakesList = WithList(ListItem)
+
+const MakesListWithLoading = WithLoading(MakesList)
 
 function Makes() {
   const dispatch = useDispatch()
@@ -17,31 +30,12 @@ function Makes() {
     fetchData()
   }, [fetchData])
 
-  if (loading) {
-    return (
-      <div className="Makes">
-        <header className="Makes-header">Makes</header>
-        <p>pending...</p>
-      </div>
-    )
-  }
-
-  const ListItem = ({ data }: ListComponentProps<string>) => {
-    return (
-      <li>
-        <Link to={`/${data}`}>{data}</Link>
-      </li>
-    )
-  }
-
-  const MakesList = WithList(ListItem)
-
   return (
     <div className="Makes">
       <header className="Makes-header">Makes</header>
       <button onClick={fetchData}>refresh</button>
       {error && <p>{error}</p>}
-      <MakesList items={makes} />
+      <MakesListWithLoading loading={loading} items={makes} />
     </div>
   )
 }
