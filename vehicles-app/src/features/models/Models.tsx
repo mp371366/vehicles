@@ -30,7 +30,7 @@ function Models() {
   const [showSearch, setShowSearch] = useState(false)
   const [search, setSearch] = useState('')
   const handleOnSearch = () => {
-    setShowSearch(true)
+    setShowSearch(!showSearch)
   }
   const handleCloseSearch = () => {
     setShowSearch(false)

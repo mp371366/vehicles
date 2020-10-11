@@ -50,9 +50,9 @@ function Vehicles() {
   const dispatch = useDispatch()
   const params = useParams<VehiclesParams>()
   const { make, model } = params
-  const { vehicles, loading, error, filters } = useTypedSelector((state) => state.data.vehicles)
+  const { vehicles, loading, error, filters, showFilters } = useTypedSelector((state) => state.data.vehicles)
   const handleOnSearch = () => {
-    dispatch(setShowFilters(true))
+    dispatch(setShowFilters(!showFilters))
   }
 
   const fetchData = useCallback(() => {
