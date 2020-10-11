@@ -1,0 +1,6 @@
+.Header {
+  display: grid;
+  grid-template-columns: 100px auto 100px;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+}

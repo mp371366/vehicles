@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import { useTypedSelector } from '../../app/store'
 import ErrorInfo from '../../components/ErrorInfo/ErrorInfo'
+import Header from '../../components/Header/Header'
 import WithList, { ListComponentProps } from '../../hocs/withList/WithList'
 import WithLoading from '../../hocs/withLoading/WithLoading'
 import { fetchModels, setError } from './modelsSlice'
@@ -38,7 +39,7 @@ function Models() {
 
   return (
     <div className="Models">
-      <header className="Models-header">Models</header>
+      <Header back title={`${make} models`} />
       <ErrorInfo error={error} onFix={fetchData} />
       <ModelsListWithLoading loading={loading} items={models.map((model) => ({ model, make }))} />
     </div>

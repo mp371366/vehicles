@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useTypedSelector } from '../../app/store'
 import ErrorInfo from '../../components/ErrorInfo/ErrorInfo'
+import Header from '../../components/Header/Header'
 import WithList, { ListComponentProps } from '../../hocs/withList/WithList'
 import WithLoading from '../../hocs/withLoading/WithLoading'
 import { fetchMakes, setError } from './makesSlice'
@@ -34,7 +35,7 @@ function Makes() {
 
   return (
     <div className="Makes">
-      <header className="Makes-header">Makes</header>
+      <Header title="Makes" />
       <ErrorInfo error={error} onFix={fetchData} />
       <MakesListWithLoading loading={loading} items={makes} />
     </div>

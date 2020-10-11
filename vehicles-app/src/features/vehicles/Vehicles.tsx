@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { useTypedSelector } from '../../app/store'
 import ErrorInfo from '../../components/ErrorInfo/ErrorInfo'
+import Header from '../../components/Header/Header'
 import WithList, { ListComponentProps } from '../../hocs/withList/WithList'
 import WithLoading from '../../hocs/withLoading/WithLoading'
 import { fetchVehicles, setError, Vehicle } from './vehiclesSlice'
@@ -19,6 +20,7 @@ const VehiclesListWithLoading = WithLoading(VehiclesList)
 function Vehicles() {
   const dispatch = useDispatch()
   const params = useParams<VehiclesParams>()
+  const { make, model } = params
   const { vehicles, loading, error } = useTypedSelector((state) => state.data.vehicles)
 
   const fetchData = useCallback(() => {
@@ -32,7 +34,7 @@ function Vehicles() {
 
   return (
     <div className="Vehicles">
-      <header className="Vehicles-header">Vehicles</header>
+      <Header back title={`${make} ${model} vehicles`} />
       <ErrorInfo error={error} onFix={fetchData} />
       <VehiclesListWithLoading items={vehicles} loading={loading} />
     </div>

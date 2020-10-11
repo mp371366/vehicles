@@ -10,7 +10,8 @@
   ],
   "rules": {
     "prettier": true,
-    "interface-name": false
+    "interface-name": false,
+    "jsx-boolean-value": false
   },
   "linterOptions": {
     "exclude": [
