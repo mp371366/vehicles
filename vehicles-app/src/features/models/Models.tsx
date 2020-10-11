@@ -1,9 +1,10 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import { useTypedSelector } from '../../app/store'
 import ErrorInfo from '../../components/ErrorInfo/ErrorInfo'
 import Header from '../../components/Header/Header'
+import SearchInput from '../../components/SearchInput/SearchInput'
 import WithList, { ListComponentProps } from '../../hocs/withList/WithList'
 import WithLoading from '../../hocs/withLoading/WithLoading'
 import { fetchModels, setError } from './modelsSlice'
@@ -35,8 +36,8 @@ function Models() {
   const handleCloseSearch = () => {
     setShowSearch(false)
   }
-  const handleSearchOnChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value)
+  const handleSearchOnChange = (value: string) => {
+    setSearch(value)
   }
 
   const fetchData = useCallback(() => {
@@ -55,12 +56,7 @@ function Models() {
   return (
     <div className="Models">
       <Header back title={`${make} models`} onSearch={handleOnSearch} />
-      {showSearch && (
-        <div className="Models-searchbar">
-          <input type="text" placeholder="Search" value={search} onChange={handleSearchOnChange} />
-          <button onClick={handleCloseSearch}>close</button>
-        </div>
-      )}
+      <SearchInput show={showSearch} onChange={handleSearchOnChange} onClose={handleCloseSearch} value={search} />
       <ErrorInfo error={error} onFix={fetchData} />
       <ModelsListWithLoading loading={loading} items={filteredModels.map((model) => ({ model, make }))} />
     </div>
