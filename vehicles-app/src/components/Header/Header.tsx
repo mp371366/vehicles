@@ -11,9 +11,9 @@ export type HeaderProps = {
 const Header: React.FC<HeaderProps> = ({ back = false, title, onSearch }) => {
   return (
     <header className="Header">
-      <div>{back && <Link to="../">back</Link>}</div>
+      <div>{back && <Link to="../">&#8426;</Link>}</div>
       <h1>{title}</h1>
-      <div>{onSearch && <button onClick={onSearch}>search</button>}</div>
+      <div>{onSearch && <div onClick={onSearch}>&#128269;</div>}</div>
     </header>
   )
 }
