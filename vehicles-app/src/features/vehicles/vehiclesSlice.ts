@@ -20,16 +20,37 @@ export const fetchVehicles = createAsyncThunk('/vehicles', async (params: Vehicl
   return await api.get<Vehicle[]>('/vehicles', params)
 })
 
+type MinMax = {
+  min: number
+  max: number
+}
+
+export type VehicleFilters = {
+  enginePowerPS: MinMax
+  enginePowerKW: MinMax
+  fuelType: string
+  bodyType: string
+  engineCapacity: MinMax
+}
+
 const vehiclesSlice = createSlice({
   name: 'vehicles',
   initialState: {
     vehicles: [] as Vehicle[],
     loading: false,
     error: null as string | null,
+    showFilters: false,
+    filters: null as VehicleFilters | null,
   },
   reducers: {
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload
+    },
+    setShowFilters: (state, action: PayloadAction<boolean>) => {
+      state.showFilters = action.payload
+    },
+    setFilters: (state, action: PayloadAction<VehicleFilters | null>) => {
+      state.filters = action.payload
     },
   },
   extraReducers: {
@@ -50,4 +71,4 @@ const vehiclesSlice = createSlice({
 const vehiclesReducer = vehiclesSlice.reducer
 export default vehiclesReducer
 
-export const { setError } = vehiclesSlice.actions
+export const { setError, setShowFilters, setFilters } = vehiclesSlice.actions
