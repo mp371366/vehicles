@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { useTypedSelector } from '../../app/store'
 import ErrorInfo from '../../components/ErrorInfo/ErrorInfo'
 import Header from '../../components/Header/Header'
+import Modal from '../../components/Modal/Modal'
 import WithList, { ListComponentProps } from '../../hocs/withList/WithList'
 import WithLoading from '../../hocs/withLoading/WithLoading'
 import VehicleFilters from './VehicleFilters'
@@ -76,7 +77,9 @@ function Vehicles() {
   return (
     <div className="Vehicles">
       <Header back title={`${make} ${model} vehicles`} onSearch={handleOnSearch} />
-      <VehicleFilters />
+      <Modal show={showFilters}>
+        <VehicleFilters />
+      </Modal>
       <ErrorInfo error={error} onFix={fetchData} />
       <VehiclesListWithLoading items={filteredVehicles} loading={loading} />
     </div>

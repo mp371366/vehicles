@@ -1,0 +1,20 @@
+.FilterModal-form p {
+  text-align: left;
+  padding: 5px;
+}
+
+.FilterModal-form label {
+  text-align: right;
+  padding: 5px;
+  flex-grow: 3;
+}
+
+.FilterModal-form>section>div {
+  display: flex;
+  flex-direction: row;
+  padding: 2px;
+}
+
+.FilterModal-form input, .FilterModal-form select {
+  flex-grow: 5;
+}

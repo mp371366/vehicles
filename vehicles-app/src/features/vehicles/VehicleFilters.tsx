@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../../app/store'
 import { setFilters, setShowFilters } from './vehiclesSlice'
+import './VehicleFilters.css'
 
 function minAndMax(arr: number[]): [number, number] {
   return [Math.min(...arr), Math.max(...arr)]
@@ -13,7 +14,7 @@ function uniqueValues<T>(array: T[]) {
 
 function VehicleFilters() {
   const dispatch = useDispatch()
-  const { vehicles, showFilters, filters } = useTypedSelector((state) => state.data.vehicles)
+  const { vehicles, filters } = useTypedSelector((state) => state.data.vehicles)
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -49,7 +50,7 @@ function VehicleFilters() {
     dispatch(setShowFilters(false))
   }
 
-  function handleReset(event: React.FormEvent<HTMLFormElement>) {
+  function handleReset() {
     dispatch(setFilters(null))
   }
 
@@ -59,12 +60,9 @@ function VehicleFilters() {
   const fuelTypes = uniqueValues(vehicles.map(({ fuelType }) => fuelType))
   const [minEngineCapacity, maxEngineCapacity] = minAndMax(vehicles.map(({ engineCapacity }) => engineCapacity))
 
-  if (!showFilters) {
-    return null
-  }
-
   return (
     <div className="FilterModal">
+      <h2>Set filters for a vehicle</h2>
       <form className="FilterModal-form" onSubmit={handleSubmit} onReset={handleReset}>
         <section>
           <div>
@@ -117,26 +115,30 @@ function VehicleFilters() {
           </div>
         </section>
         <section>
-          <label htmlFor="fuelType">Fuel type</label>
-          <select name="fuelType" id="fuelType" defaultValue={filters?.fuelType ?? ''}>
-            <option value="">any</option>
-            {fuelTypes.map((fuelType) => (
-              <option value={fuelType} key={fuelType}>
-                {fuelType}
-              </option>
-            ))}
-          </select>
+          <div>
+            <label htmlFor="fuelType">Fuel type</label>
+            <select name="fuelType" id="fuelType" defaultValue={filters?.fuelType ?? ''}>
+              <option value="">any</option>
+              {fuelTypes.map((fuelType) => (
+                <option value={fuelType} key={fuelType}>
+                  {fuelType}
+                </option>
+              ))}
+            </select>
+          </div>
         </section>
         <section>
-          <label htmlFor="bodyType">Body type</label>
-          <select name="bodyType" id="bodyType" defaultValue={filters?.bodyType ?? ''}>
-            <option value="">any</option>
-            {bodyTypes.map((bodyType) => (
-              <option value={bodyType} key={bodyType}>
-                {bodyType}
-              </option>
-            ))}
-          </select>
+          <div>
+            <label htmlFor="bodyType">Body type</label>
+            <select name="bodyType" id="bodyType" defaultValue={filters?.bodyType ?? ''}>
+              <option value="">any</option>
+              {bodyTypes.map((bodyType) => (
+                <option value={bodyType} key={bodyType}>
+                  {bodyType}
+                </option>
+              ))}
+            </select>
+          </div>
         </section>
         <section>
           <div>
