@@ -1,31 +1,22 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { useTypedSelector } from '../../app/store'
 import ErrorInfo from '../../components/ErrorInfo/ErrorInfo'
 import Header from '../../components/Header/Header'
 import Modal from '../../components/Modal/Modal'
+import VehicleInfo from '../../components/VehicleInfo/VehicleInfo'
 import WithList, { ListComponentProps } from '../../hocs/withList/WithList'
 import WithLoading from '../../hocs/withLoading/WithLoading'
 import VehicleFilters from './VehicleFilters'
 import { fetchVehicles, setError, setShowFilters, Vehicle, VehicleFilters as VehicleFiltersType } from './vehiclesSlice'
 import { VehiclesParams } from './vehiclesSlice'
 
-const ListItem: React.FC<ListComponentProps<Vehicle>> = ({ data, idx }) => {
+const ListItem: React.FC<ListComponentProps<Vehicle>> = ({ data, onClick }) => {
+  const handleClick = () => (onClick ?? (() => ({})))(data)
   return (
-    <li>
-      <dl>
-        <dt>Body type</dt>
-        <dd>{data.bodyType}</dd>
-        <dt>Engine capacity [ml]</dt>
-        <dd>{data.engineCapacity}</dd>
-        <dt>Engine power [KW]</dt>
-        <dd>{data.enginePowerKW}</dd>
-        <dt>Engine power [PS]</dt>
-        <dd>{data.enginePowerPS}</dd>
-        <dt>Fuel type</dt>
-        <dd>{data.fuelType}</dd>
-      </dl>
+    <li onClick={handleClick}>
+      <VehicleInfo vehicle={data} />
     </li>
   )
 }
@@ -52,8 +43,17 @@ function Vehicles() {
   const params = useParams<VehiclesParams>()
   const { make, model } = params
   const { vehicles, loading, error, filters, showFilters } = useTypedSelector((state) => state.data.vehicles)
+  const [selected, setSelected] = useState<Vehicle | null>(null)
   const handleOnSearch = () => {
     dispatch(setShowFilters(!showFilters))
+  }
+
+  const handleClick = (vehicle: Vehicle) => {
+    setSelected(vehicle)
+  }
+
+  const handleCloseSelectedModal = () => {
+    setSelected(null)
   }
 
   const fetchData = useCallback(() => {
@@ -80,8 +80,13 @@ function Vehicles() {
       <Modal show={showFilters}>
         <VehicleFilters />
       </Modal>
+      <Modal show={selected !== null}>
+        <h2>Your selected vehicle!</h2>
+        {selected !== null && <VehicleInfo vehicle={selected} />}
+        <button onClick={handleCloseSelectedModal}>Close</button>
+      </Modal>
       <ErrorInfo error={error} onFix={fetchData} />
-      <VehiclesListWithLoading items={filteredVehicles} loading={loading} />
+      <VehiclesListWithLoading items={filteredVehicles} loading={loading} onClick={handleClick} />
     </div>
   )
 }
